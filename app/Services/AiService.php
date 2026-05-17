@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log; // ← TAMBAHKAN di bagian use
+use Illuminate\Support\Facades\Log; 
 
 class AiService
 {
