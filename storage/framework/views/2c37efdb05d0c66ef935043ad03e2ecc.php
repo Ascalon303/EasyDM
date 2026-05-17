@@ -100,7 +100,7 @@
                                             class="w-full bg-stone-800 border border-stone-700 rounded px-3 py-2 text-stone-100 text-sm outline-none focus:border-gold-500/50">
                                         <option value="">— Select monster —</option>
                                         <?php $__currentLoopData = $monsterList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($m['index']); ?>" data-name="<?php echo e($m['name']); ?>"><?php echo e($m['name']); ?></option>
+                                            <option value="<?php echo e($m['index']); ?>" data-name="<?php echo e($m['name']); ?>" data-cr="<?php echo e($m['challenge_rating'] ?? 0); ?>"><?php echo e($m['name']); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
@@ -185,10 +185,11 @@ function encounterBuilder() {
             this.monsters.splice(i, 1);
         },
         updateMonsterName(i, event) {
-            const sel = event.target;
-            const opt = sel.options[sel.selectedIndex];
-            this.monsters[i].name = opt.dataset.name || '';
-            this.monsters[i].index = sel.value;
+        const sel = event.target;
+        const opt = sel.options[sel.selectedIndex];
+        this.monsters[i].name = opt.dataset.name || '';
+        this.monsters[i].index = sel.value;
+        this.monsters[i].challenge_rating = parseFloat(opt.dataset.cr) || 0;
         },
         prepareSubmit() {
             // data is bound via x-model, hidden inputs already updated

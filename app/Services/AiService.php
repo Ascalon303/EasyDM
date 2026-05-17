@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log; // ← TAMBAHKAN di bagian use
 
 class AiService
 {
@@ -14,33 +15,54 @@ class AiService
             $apiKey = env('GEMINI_API_KEY');
 
             if (!$apiKey) {
+                Log::warning('AiService: GEMINI_API_KEY tidak ditemukan, menggunakan fallback.'); // ← TAMBAHKAN
                 return $this->fallbackAnalysis($analysis);
             }
 
             $response = Http::post(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}",
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}",
                 [
                     'contents' => [
                         ['parts' => [['text' => $prompt]]]
                     ],
                     'generationConfig' => [
-                        'maxOutputTokens' => 600,
-                        'temperature'     => 0.7,
+                    'maxOutputTokens' => 3000,
+                    'temperature'     => 0.7,
+                    'thinkingConfig'  => [
+                        'thinkingBudget' => 0,  // ← nonaktifkan thinking mode
                     ],
+                ],
                 ]
             );
 
             if ($response->successful()) {
-                return $response->json('candidates.0.content.parts.0.text')
-                    ?? $this->fallbackAnalysis($analysis);
+                $text = $response->json('candidates.0.content.parts.0.text');
+
+                if (!$text) {
+                    Log::warning('AiService: Response Gemini kosong.', [ // ← TAMBAHKAN
+                        'response_body' => $response->json()
+                    ]);
+                }
+
+                return $text ?? $this->fallbackAnalysis($analysis);
             }
+
+            Log::error('AiService: Request Gemini gagal.', [ // ← TAMBAHKAN
+                'status'        => $response->status(),
+                'response_body' => $response->json()
+            ]);
 
             return $this->fallbackAnalysis($analysis);
 
         } catch (\Exception $e) {
+            Log::error('AiService: Exception saat memanggil Gemini.', [ // ← TAMBAHKAN
+                'message' => $e->getMessage(),
+                'trace'   => $e->getTraceAsString()
+            ]);
             return $this->fallbackAnalysis($analysis);
         }
     }
+
 
     private function buildPrompt(array $party, array $monsters, array $analysis): string
     {
@@ -77,7 +99,7 @@ Provide a concise analysis covering:
 4. Suggested adjustments if encounter feels unbalanced
 5. How the monsters would behave tactically
 
-Keep response under 400 words. Use D&D terminology correctly.
+Keep response under 600 words. Use D&D terminology correctly.
 PROMPT;
     }
 
@@ -89,9 +111,15 @@ PROMPT;
         $cr         = $analysis['total_cr'] ?? '?';
         $xp         = number_format($analysis['adjusted_xp'] ?? 0);
 
-        return <<<TEXT
-**Encounter Analysis**
+        $tacticalNotes = match($analysis['difficulty'] ?? '') {
+            'deadly' => "This encounter is **extremely dangerous** and likely to result in a Total Party Kill. Consider splitting the monsters into waves, giving the party environmental advantages, or adding an escape route. Make sure players know fleeing is a valid option.",
+            'hard'   => "This encounter will push the party to their limits. Resource management is critical — encourage players to use all available abilities. Have a contingency plan if things spiral out of control.",
+            'medium' => "A well-balanced encounter. The party should be able to handle this with smart play. Reward good tactics and positioning. A few lucky rolls from the monsters could make things interesting.",
+            'easy'   => "The party has a clear advantage here. Consider adding a secondary objective (protect an NPC, retrieve an item) to make the encounter more engaging beyond just combat.",
+            default  => "This encounter is below the party's power level. Use it as a resource-free warm-up, or add complications like traps, terrain hazards, or reinforcements to keep it interesting.",
+        };
 
+        return <<<TEXT
 **Difficulty Rating:** {$difficulty}
 
 **Total Challenge Rating:** {$cr} | **Adjusted XP:** {$xp}
@@ -100,16 +128,8 @@ PROMPT;
 
 **Action Economy:** {$economy}
 
-**General Tactical Notes:**
-This encounter has been analyzed using standard D&D 5e XP thresholds. The adjusted XP accounts for the action economy multiplier based on monster count.
-
-Consider the following when running this encounter:
-- Monitor player HP closely and have escape routes available if the encounter escalates unexpectedly
-- Use monster abilities strategically — stagger them rather than unleashing everything at once
-- Legendary actions and lair actions (if applicable) can dramatically shift difficulty mid-fight
-- If players are struggling, have weaker monsters flee at half HP to ease pressure
-
-*Note: Configure GEMINI_API_KEY in .env for full AI-powered narrative analysis.*
+**Tactical Notes:**
+{$tacticalNotes}
 TEXT;
     }
 }

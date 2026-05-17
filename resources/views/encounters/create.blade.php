@@ -101,7 +101,7 @@
                                             class="w-full bg-stone-800 border border-stone-700 rounded px-3 py-2 text-stone-100 text-sm outline-none focus:border-gold-500/50">
                                         <option value="">— Select monster —</option>
                                         @foreach($monsterList as $m)
-                                            <option value="{{ $m['index'] }}" data-name="{{ $m['name'] }}">{{ $m['name'] }}</option>
+                                            <option value="{{ $m['index'] }}" data-name="{{ $m['name'] }}" data-cr="{{ $m['challenge_rating'] ?? 0 }}">{{ $m['name'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -186,10 +186,11 @@ function encounterBuilder() {
             this.monsters.splice(i, 1);
         },
         updateMonsterName(i, event) {
-            const sel = event.target;
-            const opt = sel.options[sel.selectedIndex];
-            this.monsters[i].name = opt.dataset.name || '';
-            this.monsters[i].index = sel.value;
+        const sel = event.target;
+        const opt = sel.options[sel.selectedIndex];
+        this.monsters[i].name = opt.dataset.name || '';
+        this.monsters[i].index = sel.value;
+        this.monsters[i].challenge_rating = parseFloat(opt.dataset.cr) || 0;
         },
         prepareSubmit() {
             // data is bound via x-model, hidden inputs already updated

@@ -1,37 +1,36 @@
-@extends('layouts.app')
-@section('title', 'Edit Encounter')
-@section('page-title', 'Edit Encounter')
+<?php $__env->startSection('title', 'Edit Encounter'); ?>
+<?php $__env->startSection('page-title', 'Edit Encounter'); ?>
 
-@section('content')
-<div class="max-w-4xl mx-auto" x-data="encounterBuilder({{ json_encode($encounter->party_data ?? []) }}, {{ json_encode($encounter->monster_data ?? []) }})">
+<?php $__env->startSection('content'); ?>
+<div class="max-w-4xl mx-auto" x-data="encounterBuilder(<?php echo e(json_encode($encounter->party_data ?? [])); ?>, <?php echo e(json_encode($encounter->monster_data ?? [])); ?>)">
 
     <div class="deco-border bg-stone-900 rounded-xl p-8">
 
         <h2 class="font-cinzel text-xl font-bold text-gold-400 mb-8 tracking-widest">✦ EDIT ENCOUNTER</h2>
 
-        <form method="POST" action="{{ route('encounters.update', $encounter) }}" @submit="prepareSubmit">
-            @csrf @method('PUT')
+        <form method="POST" action="<?php echo e(route('encounters.update', $encounter)); ?>" @submit="prepareSubmit">
+            <?php echo csrf_field(); ?> <?php echo method_field('PUT'); ?>
 
             <div class="space-y-8">
 
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-stone-400 text-xs font-cinzel tracking-widest mb-2">NAME *</label>
-                        <input type="text" name="name" value="{{ old('name', $encounter->name) }}" required
+                        <input type="text" name="name" value="<?php echo e(old('name', $encounter->name)); ?>" required
                                class="w-full bg-stone-800 border border-stone-700 focus:border-gold-500/50 rounded-lg px-4 py-3 text-stone-100 text-sm outline-none">
                     </div>
                     <div>
                         <label class="block text-stone-400 text-xs font-cinzel tracking-widest mb-2">CAMPAIGN</label>
                         <select name="campaign_id" class="w-full bg-stone-800 border border-stone-700 rounded-lg px-4 py-3 text-stone-100 text-sm outline-none">
                             <option value="">— None —</option>
-                            @foreach($campaigns as $c)
-                            <option value="{{ $c->id }}" {{ $encounter->campaign_id==$c->id?'selected':'' }}>{{ $c->title }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $campaigns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($c->id); ?>" <?php echo e($encounter->campaign_id==$c->id?'selected':''); ?>><?php echo e($c->title); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                 </div>
 
-                {{-- Party --}}
+                
                 <div>
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-cinzel text-stone-200 font-semibold tracking-widest">⚔ PARTY</h3>
@@ -56,7 +55,7 @@
                     </div>
                 </div>
 
-                {{-- Monsters --}}
+                
                 <div>
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-cinzel text-stone-200 font-semibold tracking-widest">🐉 MONSTERS</h3>
@@ -72,9 +71,9 @@
                                     <select x-model="m.index" @change="updateMonsterName(i, $event)"
                                             class="w-full bg-stone-800 border border-stone-700 rounded px-3 py-2 text-stone-100 text-sm outline-none">
                                         <option value="">— Select —</option>
-                                        @foreach($monsterList as $mon)
-                                        <option value="{{ $mon['index'] }}" data-name="{{ $mon['name'] }}" data-cr="{{ $mon['challenge_rating'] ?? 0 }}">{{ $mon['name'] }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $monsterList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mon): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($mon['index']); ?>" data-name="<?php echo e($mon['name']); ?>" data-cr="<?php echo e($mon['challenge_rating'] ?? 0); ?>"><?php echo e($mon['name']); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
                                 <div><input type="number" x-model="m.quantity" min="1" class="w-full bg-stone-800 border border-stone-700 rounded px-3 py-2 text-stone-100 text-sm outline-none"></div>
@@ -93,7 +92,7 @@
                             class="flex-1 py-3 bg-gold-500 hover:bg-gold-400 disabled:opacity-40 text-stone-900 font-cinzel font-bold tracking-widest rounded-lg transition-all">
                         ✦ SAVE & RE-ANALYZE
                     </button>
-                    <a href="{{ route('encounters.show', $encounter) }}"
+                    <a href="<?php echo e(route('encounters.show', $encounter)); ?>"
                        class="px-6 py-3 border border-stone-700 text-stone-400 font-cinzel text-sm tracking-widest rounded-lg transition-all">
                         CANCEL
                     </a>
@@ -103,9 +102,9 @@
         </form>
 
         <div class="mt-8 pt-6 border-t border-stone-800">
-            <form method="POST" action="{{ route('encounters.destroy', $encounter) }}"
+            <form method="POST" action="<?php echo e(route('encounters.destroy', $encounter)); ?>"
                   onsubmit="return confirm('Delete this encounter?')">
-                @csrf @method('DELETE')
+                <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
                 <button type="submit" class="text-crimson-500 hover:text-crimson-400 text-xs font-cinzel tracking-widest">
                     ✕ DELETE ENCOUNTER
                 </button>
@@ -114,7 +113,7 @@
     </div>
 </div>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 function encounterBuilder(initialParty, initialMonsters) {
     return {
@@ -133,5 +132,7 @@ function encounterBuilder(initialParty, initialMonsters) {
     }
 }
 </script>
-@endpush
-@endsection
+<?php $__env->stopPush(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\easydm\easydm_full\resources\views/encounters/edit.blade.php ENDPATH**/ ?>

@@ -75,6 +75,11 @@ class EncounterController extends Controller
     {
         $this->authorize('update', $encounter);
 
+        $request->merge([
+        'party_data'   => json_decode($request->input('party_data'), true) ?? [],
+        'monster_data' => json_decode($request->input('monster_data'), true) ?? [],
+        ]);
+
         $request->validate([
             'name'        => 'required|string|max:255',
             'campaign_id' => 'nullable|exists:campaigns,id',
