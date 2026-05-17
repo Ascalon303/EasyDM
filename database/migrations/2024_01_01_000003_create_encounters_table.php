@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('encounters', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('campaign_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('name');
+            $table->enum('difficulty', ['easy', 'medium', 'hard', 'deadly'])->nullable();
+            $table->json('party_data')->nullable();
+            $table->json('monster_data')->nullable();
+            $table->longText('ai_analysis')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('encounters');
+    }
+};
