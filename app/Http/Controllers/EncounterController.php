@@ -59,9 +59,19 @@ class EncounterController extends Controller
 
     public function show(Encounter $encounter)
     {
-        $this->authorize('view', $encounter);
-        return view('encounters.show', compact('encounter'));
+    $this->authorize('view', $encounter);
+
+    $party    = $encounter->party_data ?? [];
+    $monsters = $encounter->monster_data ?? [];
+
+    $analysis = null;
+    if (!empty($party) && !empty($monsters)) {
+        $analysis = $this->analysisService->analyze($party, $monsters);
+        $analysis['party_size'] = count($party);
     }
+
+    return view('encounters.show', compact('encounter', 'analysis'));
+}
 
     public function edit(Encounter $encounter)
     {
@@ -130,6 +140,7 @@ class EncounterController extends Controller
         $encounter->update([
             'difficulty'  => $analysis['difficulty'],
             'ai_analysis' => $aiText,
+            'monster_data' => $monsters,
         ]);
 
         return view('encounters.show', compact('encounter', 'analysis'));

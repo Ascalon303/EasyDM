@@ -47,7 +47,7 @@ class EncounterAnalysisService
     {
         $partyXpThresholds = $this->calculatePartyThresholds($party);
         $monsterXp         = $this->calculateMonsterXp($monsters);
-        $adjustedXp        = $this->applyMultiplier($monsterXp, count($monsters));
+        $adjustedXp        = $this->applyMultiplier($monsterXp, array_sum(array_column($monsters, 'quantity')));
         $difficulty        = $this->getDifficulty($adjustedXp, $partyXpThresholds);
         $totalCr           = $this->getTotalCr($monsters);
 
@@ -57,7 +57,7 @@ class EncounterAnalysisService
             'raw_monster_xp'      => $monsterXp,
             'total_cr'            => $totalCr,
             'party_thresholds'    => $partyXpThresholds,
-            'monster_count'       => count($monsters),
+            'monster_count'       => array_sum(array_column($monsters, 'quantity')),
             'action_economy'      => $this->assessActionEconomy($party, $monsters),
             'tpk_risk'            => $this->assessTpkRisk($difficulty, $monsters),
         ];
