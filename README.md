@@ -41,7 +41,7 @@ DB_USERNAME=root
 DB_PASSWORD=your_password
 
 # Required for AI encounter analysis
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxx
+GEMINI_API_KEY=sk-xxxxxxxxxxxxxx
 ```
 
 ### 3. Database Setup
