@@ -38,6 +38,39 @@
     </div>
 
     
+    <?php if(auth()->user()->isDM() || auth()->user()->isAdmin()): ?>
+    <div>
+        <h3 class="font-cinzel text-gold-400 text-sm tracking-widest mb-4">✦ PLAYERS (<?php echo e($players->count()); ?>)</h3>
+
+        <?php if($players->count()): ?>
+        <div class="bg-stone-900 rounded-xl deco-border overflow-hidden">
+            <?php $__currentLoopData = $players; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $player): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="flex items-center gap-4 px-5 py-3 <?php echo e(!$loop->last ? 'border-b border-stone-800' : ''); ?>">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-gold-500 to-crimson-600 flex items-center justify-center font-cinzel font-bold text-stone-900 text-xs shrink-0">
+                    <?php echo e(strtoupper(substr($player->name, 0, 2))); ?>
+
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="text-stone-200 text-sm font-semibold"><?php echo e($player->name); ?></div>
+                    <div class="text-stone-500 text-xs"><?php echo e($player->email); ?></div>
+                </div>
+                <span class="text-xs font-cinzel text-gold-400/60 border border-gold-500/20 px-2 py-0.5 rounded">
+                    <?php echo e(strtoupper($player->role)); ?>
+
+                </span>
+            </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
+        <?php else: ?>
+        <div class="text-center py-8 deco-border bg-stone-900/40 rounded-xl">
+            <div class="text-3xl mb-2 opacity-20">👥</div>
+            <p class="text-stone-500 font-crimson italic">No players have joined yet.</p>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+
+    
     <div>
         <h3 class="font-cinzel text-gold-400 text-sm tracking-widest mb-4">✦ ENCOUNTERS (<?php echo e($encounters->count()); ?>)</h3>
 
@@ -83,5 +116,4 @@
 
 </div>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\easydm\easydm_full\resources\views/campaigns/show.blade.php ENDPATH**/ ?>

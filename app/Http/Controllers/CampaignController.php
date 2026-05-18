@@ -71,4 +71,63 @@ class CampaignController extends Controller
         return redirect()->route('campaigns.index')
                          ->with('success', 'Campaign deleted.');
     }
+
+    // Halaman browse semua campaign yang bisa di-join
+    public function browse()
+    {
+        $userId = auth()->id();
+
+        $campaigns = Campaign::where('status', '!=', 'completed')
+            ->whereDoesntHave('players', fn($q) => $q->where('user_id', $userId))
+            ->where('user_id', '!=', $userId) // bukan milik sendiri
+            ->with('user')
+            ->withCount('players')
+            ->latest()
+            ->paginate(12);
+
+        $joinedCampaigns = auth()->user()->joinedCampaigns()->withCount('encounters')->get();
+
+        return view('campaigns.browse', compact('campaigns', 'joinedCampaigns'));
+    }
+
+    // Join campaign
+    public function join(Campaign $campaign)
+    {
+        $user = auth()->user();
+
+        // Cegah DM join campaign sendiri
+        if ($campaign->user_id === $user->id) {
+            return back()->with('error', 'You cannot join your own campaign.');
+        }
+
+        // Cegah join dua kali
+        if ($campaign->players()->where('user_id', $user->id)->exists()) {
+            return back()->with('error', 'You are already in this campaign.');
+        }
+
+        $campaign->players()->attach($user->id);
+
+        return back()->with('success', "Joined \"{$campaign->title}\" successfully!");
+    }
+
+    // Leave campaign
+    public function leave(Campaign $campaign)
+    {
+        auth()->user()->joinedCampaigns()->detach($campaign->id);
+
+        return back()->with('success', "Left \"{$campaign->title}\".");
+    }
+
+    // Player view campaign (read-only)
+    public function playerView(Campaign $campaign)
+    {
+        // Pastikan user adalah member campaign ini
+        $isMember = $campaign->players()->where('user_id', auth()->id())->exists();
+        if (!$isMember) {
+            return redirect()->route('campaigns.browse')->with('error', 'You are not a member of this campaign.');
+        }
+
+        $encounters = $campaign->encounters()->latest()->get();
+        return view('campaigns.player-view', compact('campaign', 'encounters'));
+    }
 }

@@ -10,14 +10,14 @@ class CreatorContent extends Model
     use HasFactory;
 
     protected $fillable = [
-        'creator_id', 'title', 'description', 'type', 'price',
-        'is_premium', 'content_data', 'rating', 'download_count', 'cover_image',
+    'creator_id', 'title', 'description', 'type', 'price',
+    'is_premium', 'content_body', 'rating', 'download_count', 'cover_image',
     ];
 
     protected $casts = [
-        'content_data' => 'array',
-        'is_premium'   => 'boolean',
-        'price'        => 'decimal:2',
+        'is_premium' => 'boolean',
+        'price'      => 'decimal:2',
+        // content_body tidak perlu di-cast, sudah longText biasa
     ];
 
     public function creator()

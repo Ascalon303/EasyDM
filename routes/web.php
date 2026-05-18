@@ -61,6 +61,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/equipment/{index}', [EquipmentController::class, 'show'])->name('equipment.show');
 
     // Campaign CRUD
+    Route::get('campaigns/browse', [CampaignController::class, 'browse'])->name('campaigns.browse');
+    Route::get('campaigns/{campaign}/player-view', [CampaignController::class, 'playerView'])->name('campaigns.player-view');
+    Route::post('campaigns/{campaign}/join', [CampaignController::class, 'join'])->name('campaigns.join');
+    Route::delete('campaigns/{campaign}/leave', [CampaignController::class, 'leave'])->name('campaigns.leave');
     Route::resource('campaigns', CampaignController::class);
 
     // Encounter CRUD + AI analyze

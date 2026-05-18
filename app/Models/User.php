@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public function joinedCampaigns()
     {
-        return $this->belongsToMany(Campaign::class, 'campaign_players')->withTimestamps();
+        return $this->belongsToMany(Campaign::class, 'campaign_players');
     }
 }

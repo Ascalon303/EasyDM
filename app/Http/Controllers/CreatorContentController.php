@@ -34,19 +34,14 @@ class CreatorContentController extends Controller
         $this->authorizeCreator();
 
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'type'        => 'required|in:campaign_pack,monster,spell,item',
-            'price'       => 'required|numeric|min:0',
-            'is_premium'  => 'boolean',
-            'content_data' => 'nullable|string',
-        ]);
+        'title'        => 'required|string|max:255',
+        'description'  => 'nullable|string',
+        'type'         => 'required|in:campaign_pack,monster,spell,item',
+        'price'        => 'required|numeric|min:0',
+        'is_premium'   => 'boolean',
+        'content_body' => 'nullable|string',  // ← sudah diganti
+    ]);
 
-        // Parse content_data JSON if provided
-        if (!empty($validated['content_data'])) {
-            $decoded = json_decode($validated['content_data'], true);
-            $validated['content_data'] = $decoded ?? [];
-        }
 
         $validated['creator_id'] = auth()->id();
         $validated['is_premium'] = $request->boolean('is_premium');
@@ -74,18 +69,13 @@ class CreatorContentController extends Controller
         $this->authorize('update', $creatorContent);
 
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'type'        => 'required|in:campaign_pack,monster,spell,item',
-            'price'       => 'required|numeric|min:0',
-            'is_premium'  => 'boolean',
-            'content_data' => 'nullable|string',
-        ]);
-
-        if (!empty($validated['content_data'])) {
-            $decoded = json_decode($validated['content_data'], true);
-            $validated['content_data'] = $decoded ?? [];
-        }
+        'title'        => 'required|string|max:255',
+        'description'  => 'nullable|string',
+        'type'         => 'required|in:campaign_pack,monster,spell,item',
+        'price'        => 'required|numeric|min:0',
+        'is_premium'   => 'boolean',
+        'content_body' => 'nullable|string',  // ← sudah diganti
+    ]);
 
         $validated['is_premium'] = $request->boolean('is_premium');
         $creatorContent->update($validated);

@@ -37,6 +37,37 @@
         </div>
     </div>
 
+    {{-- Players --}}
+    @if(auth()->user()->isDM() || auth()->user()->isAdmin())
+    <div>
+        <h3 class="font-cinzel text-gold-400 text-sm tracking-widest mb-4">✦ PLAYERS ({{ $players->count() }})</h3>
+
+        @if($players->count())
+        <div class="bg-stone-900 rounded-xl deco-border overflow-hidden">
+            @foreach($players as $player)
+            <div class="flex items-center gap-4 px-5 py-3 {{ !$loop->last ? 'border-b border-stone-800' : '' }}">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-gold-500 to-crimson-600 flex items-center justify-center font-cinzel font-bold text-stone-900 text-xs shrink-0">
+                    {{ strtoupper(substr($player->name, 0, 2)) }}
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="text-stone-200 text-sm font-semibold">{{ $player->name }}</div>
+                    <div class="text-stone-500 text-xs">{{ $player->email }}</div>
+                </div>
+                <span class="text-xs font-cinzel text-gold-400/60 border border-gold-500/20 px-2 py-0.5 rounded">
+                    {{ strtoupper($player->role) }}
+                </span>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="text-center py-8 deco-border bg-stone-900/40 rounded-xl">
+            <div class="text-3xl mb-2 opacity-20">👥</div>
+            <p class="text-stone-500 font-crimson italic">No players have joined yet.</p>
+        </div>
+        @endif
+    </div>
+    @endif
+
     {{-- Encounters --}}
     <div>
         <h3 class="font-cinzel text-gold-400 text-sm tracking-widest mb-4">✦ ENCOUNTERS ({{ $encounters->count() }})</h3>

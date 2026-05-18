@@ -42,6 +42,15 @@
     </div>
     @endif
 
+    @if($creatorContent->content_body)
+    <div class="deco-border bg-stone-900 rounded-xl p-6">
+        <div class="rune-divider mb-4">✦ CONTENT ✦</div>
+        <div class="text-stone-300 font-crimson text-lg leading-relaxed whitespace-pre-wrap">
+            {{ $creatorContent->content_body }}
+        </div>
+    </div>
+    @endif
+
     {{-- Creator actions --}}
     @if(auth()->id() === $creatorContent->creator_id || auth()->user()->isAdmin())
     <div class="flex gap-3">
