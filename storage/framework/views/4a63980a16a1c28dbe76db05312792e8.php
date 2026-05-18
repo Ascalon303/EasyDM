@@ -17,9 +17,9 @@
 
     <div class="w-full max-w-md">
 
-        {{-- Logo --}}
+        
         <div class="text-center mb-10">
-            <a href="{{ route('home') }}" class="inline-block">
+            <a href="<?php echo e(route('home')); ?>" class="inline-block">
                 <div class="font-cinzel font-black text-4xl tracking-widest"><span class="text-gold-400">ANO</span><span class="text-crimson-400">DM</span></div>
             </a>
             <p class="text-stone-500 font-crimson italic mt-2">The Dungeon Master's Companion</p>
@@ -29,12 +29,12 @@
 
             <h2 class="font-cinzel text-xl font-semibold text-gold-400 text-center mb-8 tracking-widest">ENTER THE REALM</h2>
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-5">
-                @csrf
+            <form method="POST" action="<?php echo e(route('login')); ?>" class="space-y-5">
+                <?php echo csrf_field(); ?>
 
                 <div>
                     <label class="block text-stone-400 text-xs font-cinzel tracking-widest mb-2">EMAIL</label>
-                    <input type="email" name="email" value="{{ old('email') }}" required
+                    <input type="email" name="email" value="<?php echo e(old('email')); ?>" required
                            class="w-full bg-stone-800 border border-stone-700 rounded-lg px-4 py-3 text-stone-100 text-sm transition-all"
                            placeholder="your@email.com">
                 </div>
@@ -71,7 +71,7 @@
 
             <div class="text-center mt-6 text-stone-500 text-sm">
                 No account?
-                <a href="{{ route('register') }}" class="text-gold-400 hover:text-gold-300 transition-colors font-cinzel text-xs tracking-wider ml-1">REGISTER</a>
+                <a href="<?php echo e(route('register')); ?>" class="text-gold-400 hover:text-gold-300 transition-colors font-cinzel text-xs tracking-wider ml-1">REGISTER</a>
             </div>
 
         </div>
@@ -95,3 +95,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH C:\xampp\htdocs\anodm\EasyDM\resources\views/auth/login.blade.php ENDPATH**/ ?>

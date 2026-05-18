@@ -41,23 +41,23 @@
 </head>
 <body>
 
-    {{-- Navbar --}}
+    
     <nav class="flex items-center justify-between px-8 py-5 border-b border-stone-800/50">
         <div class="font-cinzel font-black text-2xl tracking-widest">
             <span class="text-gold-400">ANO</span><span class="text-crimson-400">DM</span>
         </div>
         <div class="flex items-center gap-6">
-            <a href="{{ route('login') }}" class="text-stone-400 hover:text-gold-400 transition-colors font-cinzel text-sm tracking-wider">LOGIN</a>
-            <a href="{{ route('register') }}" class="px-5 py-2 bg-gold-500 hover:bg-gold-400 text-stone-900 font-cinzel font-bold text-sm tracking-wider rounded transition-all hover:shadow-lg hover:shadow-gold-500/20">
+            <a href="<?php echo e(route('login')); ?>" class="text-stone-400 hover:text-gold-400 transition-colors font-cinzel text-sm tracking-wider">LOGIN</a>
+            <a href="<?php echo e(route('register')); ?>" class="px-5 py-2 bg-gold-500 hover:bg-gold-400 text-stone-900 font-cinzel font-bold text-sm tracking-wider rounded transition-all hover:shadow-lg hover:shadow-gold-500/20">
                 START FREE
             </a>
         </div>
     </nav>
 
-    {{-- Hero --}}
+    
     <section class="hero-bg min-h-screen flex items-center justify-center text-center px-4 relative overflow-hidden">
 
-        {{-- Decorative elements --}}
+        
         <div class="absolute top-20 left-10 w-64 h-64 rounded-full bg-gold-500/5 blur-3xl float"></div>
         <div class="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-arcane-500/5 blur-3xl" style="animation:float 7s ease-in-out infinite;"></div>
 
@@ -80,11 +80,11 @@
             </p>
 
             <div class="fade-up-4 flex items-center justify-center gap-4">
-                <a href="{{ route('register') }}"
+                <a href="<?php echo e(route('register')); ?>"
                    class="px-8 py-4 bg-gold-500 hover:bg-gold-400 text-stone-900 font-cinzel font-bold text-base tracking-widest rounded transition-all hover:shadow-xl hover:shadow-gold-500/30 hover:-translate-y-0.5">
                     BEGIN YOUR QUEST
                 </a>
-                <a href="{{ route('login') }}"
+                <a href="<?php echo e(route('login')); ?>"
                    class="px-8 py-4 border border-stone-700 hover:border-gold-500/50 text-stone-300 hover:text-gold-400 font-cinzel text-base tracking-widest rounded transition-all">
                     SIGN IN
                 </a>
@@ -92,7 +92,7 @@
         </div>
     </section>
 
-    {{-- Features --}}
+    
     <section class="py-24 px-8 max-w-6xl mx-auto">
         <div class="text-center mb-16">
             <div class="text-gold-400 font-cinzel text-xs tracking-[0.4rem] mb-3">✦ FEATURES ✦</div>
@@ -101,7 +101,7 @@
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            @php
+            <?php
             $features = [
                 ['icon' => '⚔️', 'title' => 'AI Encounter Analyzer', 'desc' => 'GPT-powered analysis of your encounters — difficulty, TPK risk, tactical advice, and balancing recommendations.', 'color' => 'gold'],
                 ['icon' => '🐉', 'title' => 'D&D 5e Compendium', 'desc' => 'Full access to 300+ monsters, 300+ spells, all classes, and equipment from the official D&D 5e API.', 'color' => 'crimson'],
@@ -110,39 +110,39 @@
                 ['icon' => '🏪', 'title' => 'Creator Marketplace', 'desc' => 'Publish and monetize homebrew content — campaign packs, monsters, spells, and items.', 'color' => 'crimson'],
                 ['icon' => '👥', 'title' => 'Multi-Role System', 'desc' => 'Separate roles for Admins, DMs, Players, and Creators — each with tailored features.', 'color' => 'arcane'],
             ];
-            @endphp
+            ?>
 
-            @foreach($features as $f)
+            <?php $__currentLoopData = $features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $f): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="card-glow bg-stone-900/60 rounded-xl p-6">
-                <div class="text-3xl mb-4">{{ $f['icon'] }}</div>
-                <h3 class="font-cinzel font-semibold text-stone-100 text-lg mb-2">{{ $f['title'] }}</h3>
-                <p class="text-stone-500 text-sm leading-relaxed font-crimson text-base">{{ $f['desc'] }}</p>
+                <div class="text-3xl mb-4"><?php echo e($f['icon']); ?></div>
+                <h3 class="font-cinzel font-semibold text-stone-100 text-lg mb-2"><?php echo e($f['title']); ?></h3>
+                <p class="text-stone-500 text-sm leading-relaxed font-crimson text-base"><?php echo e($f['desc']); ?></p>
             </div>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         </div>
     </section>
 
-    {{-- Tech Stack --}}
+    
     <section class="py-16 px-8 border-t border-stone-800">
         <div class="max-w-4xl mx-auto text-center">
             <div class="text-stone-600 font-cinzel text-xs tracking-[0.4rem] mb-8">✦ BUILT WITH ✦</div>
             <div class="flex flex-wrap justify-center items-center gap-8 text-stone-500">
-                @foreach(['Laravel 12', 'Blade + Alpine.js', 'Tailwind CSS', 'D&D 5e API', 'Gemini', 'MySQL'] as $tech)
-                    <span class="font-cinzel text-sm tracking-widest hover:text-gold-400 transition-colors">{{ $tech }}</span>
-                @endforeach
+                <?php $__currentLoopData = ['Laravel 12', 'Blade + Alpine.js', 'Tailwind CSS', 'D&D 5e API', 'OpenAI GPT', 'MySQL']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tech): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <span class="font-cinzel text-sm tracking-widest hover:text-gold-400 transition-colors"><?php echo e($tech); ?></span>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </section>
 
-    {{-- CTA --}}
+    
     <section class="py-24 px-8 text-center">
         <div class="max-w-2xl mx-auto">
             <h2 class="font-cinzel font-black text-5xl mb-4">
                 <span class="text-gradient">Ready to Roll?</span>
             </h2>
             <p class="text-stone-500 font-crimson text-xl italic mb-8">Join thousands of Dungeon Masters already using AnoDM.</p>
-            <a href="{{ route('register') }}"
+            <a href="<?php echo e(route('register')); ?>"
                class="inline-block px-10 py-4 bg-crimson-600 hover:bg-crimson-500 text-stone-100 font-cinzel font-bold text-base tracking-widest rounded transition-all hover:shadow-xl hover:shadow-crimson-500/30 hover:-translate-y-0.5">
                 ✦ CREATE FREE ACCOUNT ✦
             </a>
@@ -150,8 +150,9 @@
     </section>
 
     <footer class="py-6 text-center text-stone-700 font-cinzel text-xs tracking-widest border-t border-stone-800">
-        ✦ ANODM &copy; {{ date('Y') }} — ALL RIGHTS RESERVED ✦
+        ✦ ANODM &copy; <?php echo e(date('Y')); ?> — ALL RIGHTS RESERVED ✦
     </footer>
 
 </body>
 </html>
+<?php /**PATH C:\xampp\htdocs\anodm\EasyDM\resources\views/welcome.blade.php ENDPATH**/ ?>
