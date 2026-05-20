@@ -100,7 +100,11 @@ class DatabaseSeeder extends Seeder
             'price'       => 4.99,
             'is_premium'  => true,
             'download_count' => 47,
-            'content_data' => ['levels' => 5, 'encounters' => 12, 'npcs' => 8],
+
+            'content_body' => 'This pack contains 5 dungeon levels, 12 encounters, and 8 NPCs.',
+            'file_path' => 'content/abyssal-dungeon-pack.pdf',
+            'file_type' => 'pdf',
+            'file_size' => 2048000,
         ]);
 
         $this->command->info('✦ EasyDM seeded successfully!');

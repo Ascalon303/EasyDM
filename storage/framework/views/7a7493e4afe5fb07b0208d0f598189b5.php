@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <title><?php echo $__env->yieldContent('title', 'EasyDM'); ?> – EasyDM</title>
+    <title><?php echo $__env->yieldContent('title', 'AnoDM'); ?> – AnoDM</title>
 
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -159,7 +159,7 @@
 
         
         <footer class="text-center py-4 text-stone-600 text-xs font-cinzel tracking-widest border-t border-stone-800">
-            ✦ EASYDM &copy; <?php echo e(date('Y')); ?> — FORGE YOUR LEGEND ✦
+            ✦ ANODM &copy; <?php echo e(date('Y')); ?> — FORGE YOUR LEGEND ✦
         </footer>
     </div>
 

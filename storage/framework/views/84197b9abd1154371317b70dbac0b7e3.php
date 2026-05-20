@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasyDM – Forge Your Legend</title>
+    <title>AnoDM – Forge Your Legend</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -44,7 +44,7 @@
     
     <nav class="flex items-center justify-between px-8 py-5 border-b border-stone-800/50">
         <div class="font-cinzel font-black text-2xl tracking-widest">
-            <span class="text-gold-400">EASY</span><span class="text-crimson-400">DM</span>
+            <span class="text-gold-400">ANO</span><span class="text-crimson-400">DM</span>
         </div>
         <div class="flex items-center gap-6">
             <a href="<?php echo e(route('login')); ?>" class="text-stone-400 hover:text-gold-400 transition-colors font-cinzel text-sm tracking-wider">LOGIN</a>
@@ -128,7 +128,7 @@
         <div class="max-w-4xl mx-auto text-center">
             <div class="text-stone-600 font-cinzel text-xs tracking-[0.4rem] mb-8">✦ BUILT WITH ✦</div>
             <div class="flex flex-wrap justify-center items-center gap-8 text-stone-500">
-                <?php $__currentLoopData = ['Laravel 12', 'Blade + Alpine.js', 'Tailwind CSS', 'D&D 5e API', 'OpenAI GPT', 'MySQL']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tech): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php $__currentLoopData = ['Laravel 12', 'Blade + Alpine.js', 'Tailwind CSS', 'D&D 5e API', 'Gemini', 'MySQL']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tech): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <span class="font-cinzel text-sm tracking-widest hover:text-gold-400 transition-colors"><?php echo e($tech); ?></span>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
@@ -141,7 +141,7 @@
             <h2 class="font-cinzel font-black text-5xl mb-4">
                 <span class="text-gradient">Ready to Roll?</span>
             </h2>
-            <p class="text-stone-500 font-crimson text-xl italic mb-8">Join thousands of Dungeon Masters already using EasyDM.</p>
+            <p class="text-stone-500 font-crimson text-xl italic mb-8">Join thousands of Dungeon Masters already using AnoDM.</p>
             <a href="<?php echo e(route('register')); ?>"
                class="inline-block px-10 py-4 bg-crimson-600 hover:bg-crimson-500 text-stone-100 font-cinzel font-bold text-base tracking-widest rounded transition-all hover:shadow-xl hover:shadow-crimson-500/30 hover:-translate-y-0.5">
                 ✦ CREATE FREE ACCOUNT ✦
@@ -150,7 +150,7 @@
     </section>
 
     <footer class="py-6 text-center text-stone-700 font-cinzel text-xs tracking-widest border-t border-stone-800">
-        ✦ EASYDM &copy; <?php echo e(date('Y')); ?> — ALL RIGHTS RESERVED ✦
+        ✦ ANODM &copy; <?php echo e(date('Y')); ?> — ALL RIGHTS RESERVED ✦
     </footer>
 
 </body>

@@ -3,7 +3,7 @@
     
     <div class="p-6 border-b border-stone-800">
         <a href="<?php echo e(route('dashboard')); ?>" class="block">
-            <div class="text-gold-400 font-cinzel font-black text-2xl tracking-widest">EASY<span class="text-crimson-400">DM</span></div>
+            <div class="text-gold-400 font-cinzel font-black text-2xl tracking-widest">ANO<span class="text-crimson-400">DM</span></div>
             <div class="text-stone-500 text-xs tracking-[0.3rem] mt-1 font-cinzel">FORGE YOUR LEGEND</div>
         </a>
     </div>
