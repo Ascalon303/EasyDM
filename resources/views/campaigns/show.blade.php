@@ -25,6 +25,7 @@
                 <p class="text-stone-400 font-crimson text-lg italic mt-3">{{ $campaign->description }}</p>
             @endif
         </div>
+        @if(auth()->id() === $campaign->user_id || auth()->user()->isAdmin())
         <div class="flex gap-2 shrink-0">
             <a href="{{ route('campaigns.edit', $campaign) }}"
                class="px-4 py-2 border border-stone-700 hover:border-gold-500/50 text-stone-400 hover:text-gold-400 font-cinzel text-xs tracking-widest rounded-lg transition-all">
@@ -35,6 +36,7 @@
                 + ENCOUNTER
             </a>
         </div>
+        @endif
     </div>
 
     {{-- Players --}}
@@ -56,6 +58,16 @@
                 <span class="text-xs font-cinzel text-gold-400/60 border border-gold-500/20 px-2 py-0.5 rounded">
                     {{ strtoupper($player->role) }}
                 </span>
+                @if(auth()->id() === $campaign->user_id || auth()->user()->isAdmin())
+                <form method="POST" action="{{ route('campaigns.kick', [$campaign, $player->id]) }}"
+                      onsubmit="return confirm('Kick {{ $player->name }} from this campaign?')">
+                    @csrf @method('DELETE')
+                    <button type="submit"
+                        class="text-xs font-cinzel text-crimson-400 hover:text-crimson-300 border border-crimson-500/30 hover:border-crimson-400/50 px-3 py-1 rounded transition-all">
+                        KICK
+                    </button>
+                </form>
+                @endif
             </div>
             @endforeach
         </div>

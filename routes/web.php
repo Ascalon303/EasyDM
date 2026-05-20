@@ -13,6 +13,7 @@ use App\Http\Controllers\SpellController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\RoleMiddleware;
 
 // Landing page
 Route::get('/', fn() => view('welcome'))->name('home');
@@ -48,42 +49,80 @@ Route::middleware('auth')->group(function () {
     Route::get('/equipment/{index}', [EquipmentController::class, 'show'])->name('equipment.show');
 
     // ─── ADMIN ───────────────────────────────────────────────────────────────
-    Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware(RoleMiddleware::class.':admin')->group(function () {
         Route::get('/',                      [AdminController::class, 'index'])->name('index');
         Route::get('/users',                 [AdminController::class, 'users'])->name('users');
         Route::put('/users/{user}/role',     [AdminController::class, 'updateRole'])->name('users.role');
         Route::delete('/users/{user}',       [AdminController::class, 'destroyUser'])->name('users.destroy');
     });
 
-    // ─── DM & ADMIN ──────────────────────────────────────────────────────────
-    // Hanya DM yang bisa buat/edit/hapus campaign & encounter
-    Route::middleware('role:dm,admin')->group(function () {
-        Route::get('campaigns',                  [CampaignController::class, 'index'])->name('campaigns.index');
-        Route::get('campaigns/create',           [CampaignController::class, 'create'])->name('campaigns.create');
-        Route::post('campaigns',                 [CampaignController::class, 'store'])->name('campaigns.store');
-        Route::get('campaigns/{campaign}',       [CampaignController::class, 'show'])->name('campaigns.show');
-        Route::get('campaigns/{campaign}/edit',  [CampaignController::class, 'edit'])->name('campaigns.edit');
-        Route::put('campaigns/{campaign}',       [CampaignController::class, 'update'])->name('campaigns.update');
-        Route::delete('campaigns/{campaign}',    [CampaignController::class, 'destroy'])->name('campaigns.destroy');
+    // ─── CAMPAIGNS ───────────────────────────────────────────────────────────
+    // Static routes HARUS sebelum wildcard {campaign}
 
-        Route::resource('encounters', EncounterController::class);
-        Route::get('/encounters/{encounter}/analyze', [EncounterController::class, 'analyze'])->name('encounters.analyze');
-    });
+    // Khusus player & admin
+    Route::get('campaigns/browse', [CampaignController::class, 'browse'])
+        ->name('campaigns.browse')
+        ->middleware(RoleMiddleware::class.':player,admin');
 
-    // ─── PLAYER & ADMIN ──────────────────────────────────────────────────────
-    // Player bisa browse, lihat, join, leave, dan view campaign yang diikuti
-    Route::middleware('role:player,admin')->group(function () {
-        Route::get('campaigns/browse',                        [CampaignController::class, 'browse'])->name('campaigns.browse');
-        Route::get('campaigns/{campaign}/player-view',        [CampaignController::class, 'playerView'])->name('campaigns.player-view');
-        Route::post('campaigns/{campaign}/join',              [CampaignController::class, 'join'])->name('campaigns.join');
-        Route::delete('campaigns/{campaign}/leave',           [CampaignController::class, 'leave'])->name('campaigns.leave');
+    // Khusus DM & admin
+    Route::get('campaigns/create', [CampaignController::class, 'create'])
+        ->name('campaigns.create')
+        ->middleware(RoleMiddleware::class.':dm,admin');
 
-        Route::resource('characters', CharacterController::class);
-    });
+    Route::post('campaigns', [CampaignController::class, 'store'])
+        ->name('campaigns.store')
+        ->middleware(RoleMiddleware::class.':dm,admin');
 
-    // ─── CREATOR & ADMIN ─────────────────────────────────────────────────────
-    Route::middleware('role:creator,admin')->group(function () {
-        Route::resource('creator-content', CreatorContentController::class);
-    });
+    Route::get('campaigns', [CampaignController::class, 'index'])
+        ->name('campaigns.index')
+        ->middleware(RoleMiddleware::class.':dm,admin');
+
+    // Routes dengan {campaign} wildcard
+    Route::get('campaigns/{campaign}/player-view', [CampaignController::class, 'playerView'])
+        ->name('campaigns.player-view')
+        ->middleware(RoleMiddleware::class.':player,admin');
+
+    Route::post('campaigns/{campaign}/join', [CampaignController::class, 'join'])
+        ->name('campaigns.join')
+        ->middleware(RoleMiddleware::class.':player,admin');
+
+    Route::delete('campaigns/{campaign}/leave', [CampaignController::class, 'leave'])
+        ->name('campaigns.leave')
+        ->middleware(RoleMiddleware::class.':player,admin');
+
+    Route::delete('campaigns/{campaign}/kick/{userId}', [CampaignController::class, 'kick'])
+        ->name('campaigns.kick')
+        ->middleware(RoleMiddleware::class.':dm,admin');
+
+    Route::get('campaigns/{campaign}/edit', [CampaignController::class, 'edit'])
+        ->name('campaigns.edit')
+        ->middleware(RoleMiddleware::class.':dm,admin');
+
+    Route::put('campaigns/{campaign}', [CampaignController::class, 'update'])
+        ->name('campaigns.update')
+        ->middleware(RoleMiddleware::class.':dm,admin');
+
+    Route::delete('campaigns/{campaign}', [CampaignController::class, 'destroy'])
+        ->name('campaigns.destroy')
+        ->middleware(RoleMiddleware::class.':dm,admin');
+
+    Route::get('campaigns/{campaign}', [CampaignController::class, 'show'])
+        ->name('campaigns.show')
+        ->middleware(RoleMiddleware::class.':dm,admin');
+
+    // ─── ENCOUNTERS — DM & admin ──────────────────────────────────────────────
+    Route::resource('encounters', EncounterController::class)
+        ->middleware(RoleMiddleware::class.':dm,admin');
+    Route::get('/encounters/{encounter}/analyze', [EncounterController::class, 'analyze'])
+        ->name('encounters.analyze')
+        ->middleware(RoleMiddleware::class.':dm,admin');
+
+    // ─── CHARACTERS — player & admin ─────────────────────────────────────────
+    Route::resource('characters', CharacterController::class)
+        ->middleware(RoleMiddleware::class.':player,admin');
+
+    // ─── CREATOR CONTENT — creator & admin ───────────────────────────────────
+    Route::resource('creator-content', CreatorContentController::class)
+        ->middleware(RoleMiddleware::class.':creator,admin');
 
 });

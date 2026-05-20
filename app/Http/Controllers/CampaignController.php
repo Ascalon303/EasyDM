@@ -35,7 +35,16 @@ class CampaignController extends Controller
 
     public function show(Campaign $campaign)
     {
-        $this->authorize('view', $campaign);
+        $user = auth()->user();
+
+        $isOwner  = $campaign->user_id === $user->id;
+        $isAdmin  = $user->isAdmin();
+        $isPlayer = $campaign->players()->where('user_id', $user->id)->exists();
+
+        if (!$isOwner && !$isAdmin && !$isPlayer) {
+            abort(403, 'You are not a member of this campaign.');
+        }
+
         $encounters = $campaign->encounters()->latest()->get();
         $players    = $campaign->players()->get();
         return view('campaigns.show', compact('campaign', 'encounters', 'players'));
@@ -43,13 +52,17 @@ class CampaignController extends Controller
 
     public function edit(Campaign $campaign)
     {
-        $this->authorize('update', $campaign);
+        if ($campaign->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
+            abort(403);
+        }
         return view('campaigns.edit', compact('campaign'));
     }
 
     public function update(Request $request, Campaign $campaign)
     {
-        $this->authorize('update', $campaign);
+        if ($campaign->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
+            abort(403);
+        }
 
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
@@ -66,7 +79,9 @@ class CampaignController extends Controller
 
     public function destroy(Campaign $campaign)
     {
-        $this->authorize('delete', $campaign);
+        if ($campaign->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
+            abort(403);
+        }
         $campaign->delete();
         return redirect()->route('campaigns.index')
                          ->with('success', 'Campaign deleted.');
@@ -79,7 +94,7 @@ class CampaignController extends Controller
 
         $campaigns = Campaign::where('status', '!=', 'completed')
             ->whereDoesntHave('players', fn($q) => $q->where('user_id', $userId))
-            ->where('user_id', '!=', $userId) // bukan milik sendiri
+            ->where('user_id', '!=', $userId)
             ->with('user')
             ->withCount('players')
             ->latest()
@@ -95,12 +110,10 @@ class CampaignController extends Controller
     {
         $user = auth()->user();
 
-        // Cegah DM join campaign sendiri
         if ($campaign->user_id === $user->id) {
             return back()->with('error', 'You cannot join your own campaign.');
         }
 
-        // Cegah join dua kali
         if ($campaign->players()->where('user_id', $user->id)->exists()) {
             return back()->with('error', 'You are already in this campaign.');
         }
@@ -118,10 +131,21 @@ class CampaignController extends Controller
         return back()->with('success', "Left \"{$campaign->title}\".");
     }
 
+    // Kick player dari campaign (hanya DM pemilik)
+    public function kick(Campaign $campaign, $userId)
+    {
+        if ($campaign->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
+            abort(403, 'Only the campaign owner can kick players.');
+        }
+
+        $campaign->players()->detach($userId);
+
+        return back()->with('success', 'Player has been removed from the campaign.');
+    }
+
     // Player view campaign (read-only)
     public function playerView(Campaign $campaign)
     {
-        // Pastikan user adalah member campaign ini
         $isMember = $campaign->players()->where('user_id', auth()->id())->exists();
         if (!$isMember) {
             return redirect()->route('campaigns.browse')->with('error', 'You are not a member of this campaign.');
