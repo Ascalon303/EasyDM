@@ -28,10 +28,10 @@ return [
         'base_url' => env('DND_API_BASE_URL', 'https://www.dnd5eapi.co/api'),
     ],
 
-    // OpenAI for AI encounter analysis
-    'openai' => [
-        'key'   => env('OPENAI_API_KEY'),
-        'model' => env('OPENAI_MODEL', 'gpt-4o-mini'),
+    // Gemini AI for encounter analysis
+    'gemini' => [
+        'key'   => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
     ],
 
 ];
