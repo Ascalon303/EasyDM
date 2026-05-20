@@ -20,7 +20,7 @@
     <div class="w-full max-w-lg">
 
         <div class="text-center mb-8">
-            <a href="{{ route('home') }}" class="inline-block">
+            <a href="<?php echo e(route('home')); ?>" class="inline-block">
                 <div class="font-cinzel font-black text-4xl tracking-widest"><span class="text-gold-400">ANO</span><span class="text-crimson-400">DM</span></div>
             </a>
             <p class="text-stone-500 font-crimson italic mt-2">Choose your path, adventurer</p>
@@ -30,19 +30,19 @@
 
             <h2 class="font-cinzel text-xl font-semibold text-gold-400 text-center mb-8 tracking-widest">BEGIN YOUR QUEST</h2>
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-5">
-                @csrf
+            <form method="POST" action="<?php echo e(route('register')); ?>" class="space-y-5">
+                <?php echo csrf_field(); ?>
 
                 <div>
                     <label class="block text-stone-400 text-xs font-cinzel tracking-widest mb-2">YOUR NAME</label>
-                    <input type="text" name="name" value="{{ old('name') }}" required
+                    <input type="text" name="name" value="<?php echo e(old('name')); ?>" required
                            class="w-full bg-stone-800 border border-stone-700 rounded-lg px-4 py-3 text-stone-100 text-sm transition-all"
                            placeholder="Adventurer name">
                 </div>
 
                 <div>
                     <label class="block text-stone-400 text-xs font-cinzel tracking-widest mb-2">EMAIL</label>
-                    <input type="email" name="email" value="{{ old('email') }}" required
+                    <input type="email" name="email" value="<?php echo e(old('email')); ?>" required
                            class="w-full bg-stone-800 border border-stone-700 rounded-lg px-4 py-3 text-stone-100 text-sm transition-all"
                            placeholder="your@email.com">
                 </div>
@@ -86,26 +86,26 @@
                     </div>
                 </div>
 
-                {{-- Role selection --}}
+                
                 <div>
                     <label class="block text-stone-400 text-xs font-cinzel tracking-widest mb-3">CHOOSE YOUR ROLE</label>
                     <div class="grid grid-cols-3 gap-3">
-                        @php
+                        <?php
                         $roles = [
                             ['value' => 'dm',      'icon' => '🎲', 'label' => 'Dungeon Master', 'desc' => 'Run campaigns & encounters'],
                             ['value' => 'player',  'icon' => '⚔️', 'label' => 'Player',         'desc' => 'Manage characters'],
                             ['value' => 'creator', 'icon' => '✍️', 'label' => 'Creator',        'desc' => 'Publish content'],
                         ];
-                        @endphp
+                        ?>
 
-                        @foreach($roles as $role)
+                        <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <label class="role-card rounded-xl p-4 text-center">
-                            <input type="radio" name="role" value="{{ $role['value'] }}" class="hidden" {{ old('role', 'dm') === $role['value'] ? 'checked' : '' }}>
-                            <div class="text-2xl mb-2">{{ $role['icon'] }}</div>
-                            <div class="text-stone-200 text-xs font-cinzel font-semibold">{{ $role['label'] }}</div>
-                            <div class="text-stone-600 text-xs mt-1">{{ $role['desc'] }}</div>
+                            <input type="radio" name="role" value="<?php echo e($role['value']); ?>" class="hidden" <?php echo e(old('role', 'dm') === $role['value'] ? 'checked' : ''); ?>>
+                            <div class="text-2xl mb-2"><?php echo e($role['icon']); ?></div>
+                            <div class="text-stone-200 text-xs font-cinzel font-semibold"><?php echo e($role['label']); ?></div>
+                            <div class="text-stone-600 text-xs mt-1"><?php echo e($role['desc']); ?></div>
                         </label>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
 
@@ -117,7 +117,7 @@
 
             <div class="text-center mt-6 text-stone-500 text-sm">
                 Already registered?
-                <a href="{{ route('login') }}" class="text-gold-400 hover:text-gold-300 transition-colors font-cinzel text-xs tracking-wider ml-1">SIGN IN</a>
+                <a href="<?php echo e(route('login')); ?>" class="text-gold-400 hover:text-gold-300 transition-colors font-cinzel text-xs tracking-wider ml-1">SIGN IN</a>
             </div>
 
         </div>
@@ -142,3 +142,4 @@
 
 </body>
 </html>
+<?php /**PATH C:\xampp\htdocs\anodm\EasyDM\resources\views/auth/register.blade.php ENDPATH**/ ?>

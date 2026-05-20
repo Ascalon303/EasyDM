@@ -46,14 +46,15 @@
                                class="w-full bg-stone-800 border border-stone-700 rounded-lg px-4 py-3 pr-10 text-stone-100 text-sm transition-all"
                                placeholder="••••••••">
                         <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-200 transition-colors" onclick="togglePassword('password', this)" aria-label="Toggle password visibility">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="eye-open w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="eye-open w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="eye-closed w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            </svg>                                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="eye-closed w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a20.94 20.94 0 0 1 5.06-6.94"></path>
                                 <path d="M1 1l22 22"></path>
                             </svg>
+
                         </button>
                     </div>
                 </div>
@@ -84,12 +85,12 @@
             const closedIcon = btn.querySelector('.eye-closed');
             if (field.type === 'password') {
                 field.type = 'text';
-                if (openIcon) openIcon.classList.remove('hidden');
-                if (closedIcon) closedIcon.classList.add('hidden');
-            } else {
-                field.type = 'password';
                 if (openIcon) openIcon.classList.add('hidden');
                 if (closedIcon) closedIcon.classList.remove('hidden');
+            } else {
+                field.type = 'password';
+                if (openIcon) openIcon.classList.remove('hidden');
+                if (closedIcon) closedIcon.classList.add('hidden');
             }
         }
     </script>

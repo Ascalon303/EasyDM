@@ -128,7 +128,7 @@
         <div class="max-w-4xl mx-auto text-center">
             <div class="text-stone-600 font-cinzel text-xs tracking-[0.4rem] mb-8">✦ BUILT WITH ✦</div>
             <div class="flex flex-wrap justify-center items-center gap-8 text-stone-500">
-                <?php $__currentLoopData = ['Laravel 12', 'Blade + Alpine.js', 'Tailwind CSS', 'D&D 5e API', 'OpenAI GPT', 'MySQL']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tech): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php $__currentLoopData = ['Laravel 12', 'Blade + Alpine.js', 'Tailwind CSS', 'D&D 5e API', 'Gemini', 'MySQL']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tech): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <span class="font-cinzel text-sm tracking-widest hover:text-gold-400 transition-colors"><?php echo e($tech); ?></span>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
